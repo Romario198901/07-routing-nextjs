@@ -16,16 +16,18 @@ const api = axios.create({
 export const fetchNotes = async (
   query: string,
   page: number,
+  tag?: string
 ): Promise<AxiosNotesResponse> => {
   const response = await api.get<AxiosNotesResponse>("/notes", {
     params: {
       page,
       perPage: ITEMS_PER_PAGE,
       ...(query.trim() ? { search: query } : {}),
+      ...(tag ? {tag} : {}),
     },
   });
   return response.data;
-};
+}; 
 export const createNote = async (note: NewNote): Promise<Note> => {
   const response = await api.post<Note>("/notes", note);
   return response.data;
