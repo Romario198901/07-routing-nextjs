@@ -9,16 +9,15 @@ import Pagination from '@/components/Pagination/Pagination';
 import NoteList from '@/components/NoteList/NoteList';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import Modal from '@/components/Modal/Modal';
-import { useParams } from 'next/navigation';
-
-export default function NotesClient() {
+interface NotesClientPriops {
+  tag: string;
+}
+export default function NotesClient({ tag }: NotesClientPriops) {
   const [searchTerm, setSearchTerm] = useState('');
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { slug } = useParams<{ slug?: string[] }>();
-  const tagFromUrl = slug?.[0] ?? 'all';
-  const tag = tagFromUrl === 'all' ? undefined : tagFromUrl;
+
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: ['notes', { query, page, tag: tag ?? 'all' }],
     queryFn: () => fetchNotes(query, page, tag),
@@ -43,11 +42,11 @@ export default function NotesClient() {
     if (notes.length === 0) {
       return;
     }
-    if (tagFromUrl) {
+    if (tag) {
       setQuery('');
       setPage(1);
     }
-  }, [isFetching, query, notes.length, tagFromUrl]);
+  }, [isFetching, query, notes.length, tag]);
   const handleModalOpen = () => {
     setModalIsOpen(true);
   };

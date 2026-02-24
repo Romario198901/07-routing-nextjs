@@ -4,8 +4,10 @@ import css from './NotePreview.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
 import Modal from '@/components/Modal/Modal';
+interface NotePreviewClientProps {
 
-export default function NotePreviewClient() {
+}
+export default function NotePreviewClient({}: NotePreviewClientProps) {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, error } = useQuery({
@@ -22,7 +24,7 @@ export default function NotePreviewClient() {
       {!isLoading && error && <p>Something went wrong.</p>}
 
       {!isLoading && !error && data && (
-        <Modal onClose={() => router.back}>
+        <Modal onClose={() => router.back()}>
           <div className={css.container}>
             <button className={css.backBtn} onClick={() => router.back()}>
               Go Back
