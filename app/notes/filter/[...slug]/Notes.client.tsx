@@ -19,7 +19,7 @@ export default function NotesClient({ tag }: NotesClientPriops) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const { data, isLoading, isError, isFetching } = useQuery({
-    queryKey: ['notes', { query, page, tag: tag ?? 'all' }],
+    queryKey: ['notes', { query, page, tag: tag }],
     queryFn: () => fetchNotes(query, page, tag),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
@@ -36,17 +36,6 @@ export default function NotesClient({ tag }: NotesClientPriops) {
     setSearchTerm(value);
     debouncedQuery(value);
   };
-  useEffect(() => {
-    if (query.trim() === '') return;
-    if (isFetching) return;
-    if (notes.length === 0) {
-      return;
-    }
-    if (tag) {
-      setQuery('');
-      setPage(1);
-    }
-  }, [isFetching, query, notes.length, tag]);
   const handleModalOpen = () => {
     setModalIsOpen(true);
   };
